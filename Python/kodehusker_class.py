@@ -6,7 +6,7 @@ import os
 import pyAesCrypt
 
 # Set pause time between actions (in seconds):
-sleeptime = 1
+sleeptime = 2
 
 os.system('mode con: cols=47 lines=20')
 
@@ -46,7 +46,7 @@ class WordSaver:
         else:
             self.fileName = filename + ".txt"
         self.encryptetFileName = self.fileName + ".aes"
-        return f"Successfully changed filename to {self.fileName}"
+        return f"Skiftede filnavn til {self.fileName}"
 
     # Function for emptying the file with the filename of the object
     def emptyfile(self):
@@ -88,13 +88,14 @@ class WordSaver:
                 print("\n" + self.encrypt(password))
                 print("Ord gemt")
                 input("\nTryk enter for hovedmenu")
+                return "..."
             elif confirm.lower() == "n":
                 return "Annulleret"
             else:
                 print("Ugyldigt")
                 return self.write()
         except Exception as e:
-            WordSaver.error(str(e))
+            return WordSaver.error(str(e))
 
     # Function for reading the aes file. Calls decrypt() with user entered key for decryption
     def read(self):
@@ -105,16 +106,22 @@ class WordSaver:
                 if password.lower() == "q":
                     return "Quitting read mode"
                 else:
-                    print("\n" + self.decrypt(password))
+                    print("\n" + self.decrypt(password) + "\n")
                     fil = open(self.fileName, "r")
-                    print("\nDit ord er: " + str(fil.read()))
+                    print("-" * 30)
+                    print("Dit ord er: " + str(fil.read()))
+                    print("-" * 30)
                     fil.close()
                     self.emptyfile()
                     count = 3
                     input("\nTryk enter for hovedmenu")
+                    return "..."
+            except FileNotFoundError:
+                pass
             except Exception as e:
                 return WordSaver.error(str(e))
             count += 1
+        return "For mange forsøg"
 
     # Main function, calls all other functions to run the program.
     def run(self):
@@ -124,8 +131,8 @@ class WordSaver:
             user = input(f"""
               Filnavn: {self.fileName}
 
-                Ordhusker 3000
-    (S)kriv, (l)æs, (f)ilnavn eller (q)uit: """)
+               Ordhusker 3000
+   (S)kriv, (l)æs, (f)ilnavn eller (q)uit: """)
             if user.lower() == "s":
                 print(self.write())
                 sleep(sleeptime)
