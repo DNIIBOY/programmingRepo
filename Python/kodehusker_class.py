@@ -6,11 +6,19 @@ import pyAesCrypt
 os.system('mode con: cols=47 lines=20')
 
 
-class saveCode:
-  def __init__(self, fileName):
-    self.filename = fileName
-    self.encryptetFileName = fileName + ".aes"
-
+class wordSaver:
+    def __init__(self, fileName):
+        if fileName[-4:] == ".txt":
+            self.fileName = fileName
+        else:
+            self.fileName = fileName + ".txt"
+        self.encryptetFileName = self.fileName + ".aes"
+    def changeFileName(self):
+        os.system("cls")
+        self.fileName = input("""
+                       Ordhusker 3000
+                      Indtast filnavn: """)
+        return "Success"
 
 
 
@@ -85,15 +93,22 @@ def read():
             raise
         count+=1
 
+fileName = input("""
+                Ordhusker 3000
+               Indtast filnavn: """)
+word = wordSaver(fileName)
+
 while True:
     os.system("cls")
     user = input("""
                 Ordhusker 3000
-        (S)kriv, (l)æs eller (q)uit: """)
+    (S)kriv, (l)æs, (f)ilnavn eller (q)uit: """)
     if user.lower() == "s":
         write()
     elif user.lower() == "l":
         read()
+    elif user.lower() == "f":
+        word.changeFileName()
     elif user.lower() == "q":
         os.system("cls")
         break
