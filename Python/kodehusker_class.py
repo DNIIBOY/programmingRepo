@@ -1,6 +1,7 @@
 # ORDHUSKER 3000
 
 from time import sleep
+from sys import exit
 import os
 import pyAesCrypt
 
@@ -20,6 +21,12 @@ class WordSaver:
     def error(error):
         return f"\nDer skete en fejl, prøv igen:\n{error}"
 
+    @staticmethod
+    def quit():
+        os.system('mode con: cols=80 lines=20')
+        os.system("cls")
+        exit()
+
     # Initiate the object with a filename and automate creating the filename for the encrypted file
     def __init__(self, filename):
         if filename[-4:] == ".txt":
@@ -31,9 +38,14 @@ class WordSaver:
     # Function for changing the filename of the object
     def changefilename(self):
         os.system("cls")
-        self.fileName = input("""
-                       Ordhusker 3000
-                      Indtast filnavn: """)
+        filename = input("""
+              Ordhusker 3000
+             Indtast filnavn: """)
+        if filename[-4:] == ".txt":
+            self.fileName = filename
+        else:
+            self.fileName = filename + ".txt"
+        self.encryptetFileName = self.fileName + ".aes"
         return f"Successfully changed filename to {self.fileName}"
 
     # Function for emptying the file with the filename of the object
@@ -110,10 +122,10 @@ class WordSaver:
         while True:
             os.system("cls")
             user = input(f"""
-                       Filnavn: {self.fileName}
+              Filnavn: {self.fileName}
 
-                        Ordhusker 3000
-            (S)kriv, (l)æs, (f)ilnavn eller (q)uit: """)
+                Ordhusker 3000
+    (S)kriv, (l)æs, (f)ilnavn eller (q)uit: """)
             if user.lower() == "s":
                 print(self.write())
                 sleep(sleeptime)
@@ -124,8 +136,7 @@ class WordSaver:
                 print(self.changefilename())
                 sleep(sleeptime)
             elif user.lower() == "q":
-                os.system("cls")
-                break
+                WordSaver.quit()
             else:
                 print("Ugyldigt input")
                 sleep(sleeptime)
@@ -135,7 +146,7 @@ class WordSaver:
 # Only runs if program is run as script.
 if __name__ == '__main__':
     fileName = input("""
-                        Ordhusker 3000
-                       Indtast filnavn: """)
+               Ordhusker 3000
+              Indtast filnavn: """)
     word = WordSaver(fileName)
     word.run()
