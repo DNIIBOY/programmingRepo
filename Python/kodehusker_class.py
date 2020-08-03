@@ -7,20 +7,39 @@ os.system('mode con: cols=47 lines=20')
 
 
 class wordSaver:
+    bufferSize = 64 * 1024
     def __init__(self, fileName):
         if fileName[-4:] == ".txt":
             self.fileName = fileName
         else:
             self.fileName = fileName + ".txt"
         self.encryptetFileName = self.fileName + ".aes"
+    def error(self, error):
+      print(f"\nDer skete en fejl, prøv igen:\n{error}")
     def changeFileName(self):
         os.system("cls")
         self.fileName = input("""
                        Ordhusker 3000
                       Indtast filnavn: """)
-        return "Success"
+        return f"Successfully changed filename to {self.fileName}"
+    def emptyFile(self):
+        fil = open(self.fileName, "w")
+        fil.write("")
+        fil.close()
+    def encrypt(self, key):
+        try:
+            pyAesCrypt.encryptFile(self.fileName, self.encryptetFileName, key, bufferSize)
+            self.emptyFile()
+        except:
+            return error(raise)
 
-
+    def decrypt(self, key):
+      try:
+          pyAesCrypt.decryptFile(self.encryptetFileName, self.fileName, key, bufferSize)
+      except something:
+          return "Forkert Kode!"
+      except:
+          error(raise)
 
 
 
@@ -31,10 +50,7 @@ file = "john.txt"
 
 cryptetFile = file + ".aes"
 
-def emptyFile():
-    fil = open(file, "w")
-    fil.write("")
-    fil.close()
+
 
 def cryptFile(mode, key):
     bufferSize = 64 * 1024
@@ -96,6 +112,7 @@ def read():
 fileName = input("""
                 Ordhusker 3000
                Indtast filnavn: """)
+
 word = wordSaver(fileName)
 
 while True:

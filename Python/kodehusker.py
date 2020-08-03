@@ -2,7 +2,6 @@
 
 file = "john.txt"
 
-
 cryptetFile = file + ".aes"
 
 import os
