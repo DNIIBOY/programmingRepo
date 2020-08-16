@@ -20,7 +20,8 @@ class WordSaver:
     @staticmethod
     def error(error):
         return f"\nDer skete en fejl, prøv igen:\n{error}"
-
+        
+    # Method for qutting the program and going back to normal terminal
     @staticmethod
     def quit():
         os.system('mode con: cols=80 lines=20')
