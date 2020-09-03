@@ -9,7 +9,6 @@ def andengrad(a, b, c, mellem):
     r2 = 0
     topx = 0
     topy = 0
-    kvdiskrimi = 0
     try:
         diskrimi = (b * b) - (4 * a * c)
         kvdiskrimi = sqrt(diskrimi)
@@ -32,14 +31,14 @@ def andengrad(a, b, c, mellem):
         print("Rod 2: " + str(round(r2, 2)))
 
     elif mellem.lower() == "j":
-        print("""Diskriminant:
-{}^2 - 4 * {} * {} = {}""".format(b, a, c, round(diskrimi, 4)))
-        print("""Rødder:
-(-{} + sqrt({})) / 2 * {} = {}
-(-{} - sqrt({})) / 2 * {} = {}""".format(b, round(diskrimi, 4), a, round(r2, 4), b, round(diskrimi, 4), a, round(r1, 4)))
-        print("""Toppunkt:
-x = -{} / 2 * {} = {}
-y = -{} / 4 * {} = {}""".format(b, a, round(topx, 4), round(diskrimi, 4), a, round(topy, 4)))
+        print(f"""Diskriminant:
+{b}² - 4 * {a} * {c} = {round(diskrimi, 4)}""")
+        print(f"""Rødder:
+(-{b} + √({round(diskrimi, 4)}) / 2 * {a} = {round(r2, 4)}
+(-{b} - √({round(diskrimi, 4)}) / 2 * {a} = {round(r1, 4)}""")
+        print(f"""Toppunkt:
+x = -{b} / 2 * {a} = {round(topx, 4)}
+y = -{round(diskrimi, 4)} / 4 * {a} = {round(topy, 4)}""")
         print("""-----------------------------------------""")
 
 
