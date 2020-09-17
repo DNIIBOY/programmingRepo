@@ -32,7 +32,7 @@ def andengrad(a, b, c, mellem):
 
     elif mellem.lower() == "j":
         print(f"""Diskriminant:
-{b}² - (4 * {a} * {c} = {round(diskrimi, 4)})""")
+{b}² - (4 * {a} * {c}) = {round(diskrimi, 4)}""")
         print(f"""Rødder:
 (-{b} + √({round(diskrimi, 4)}) / 2 * {a} = {round(r2, 4)}
 (-{b} - √({round(diskrimi, 4)}) / 2 * {a} = {round(r1, 4)}""")
