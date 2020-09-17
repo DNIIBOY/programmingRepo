@@ -32,7 +32,7 @@ def andengrad(a, b, c, mellem):
 
     elif mellem.lower() == "j":
         print(f"""Diskriminant:
-{b}² - 4 * {a} * {c} = {round(diskrimi, 4)}""")
+{b}² - (4 * {a} * {c} = {round(diskrimi, 4)})""")
         print(f"""Rødder:
 (-{b} + √({round(diskrimi, 4)}) / 2 * {a} = {round(r2, 4)}
 (-{b} - √({round(diskrimi, 4)}) / 2 * {a} = {round(r1, 4)}""")
@@ -43,26 +43,39 @@ y = -{round(diskrimi, 4)} / 4 * {a} = {round(topy, 4)}""")
 
 
 while True:
-    print("""---------Andengrads Funktioner-----------""")
+    print("""----------Andengrads Funktioner----------
+         Af: Daniel Nettelfield""")
     try:
         a = input("""            Indsæt a værdi: """)
         if a.lower() == "q":
             break
+        elif a.lower() == "c":
+            os.system("cls")
+            continue
         a = float(a)
         b = input("""            Indsæt b værdi: """)
         if b.lower() == "q":
             break
+        elif b.lower() == "c":
+            os.system("cls")
+            continue
         b = float(b)
         c = input("""            Indsæt c værdi: """)
         if c.lower() == "q":
             break
+        elif c.lower() == "c":
+            os.system("cls")
+            continue
         c = float(c)
         mellem = str(input("""Vil du have mellemregninger med? (j/n): """))
         print("------------------------------------------")
         if mellem.lower() == "j" or mellem.lower() == "n":
             andengrad(a, b, c, mellem)
-        elif mellem.lower() =="q":
+        elif mellem.lower() == "q":
             break
+        elif mellem.lower() == "c":
+            os.system("cls")
+            continue
         else:
             print("Ugyldigt Input")
     except:
