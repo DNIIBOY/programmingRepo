@@ -3,6 +3,7 @@ import os
 
 os.system('mode con: cols=42 lines=20')
 
+
 def andengrad(a, b, c, mellem):
     diskrimi = 0
     r1 = 0
@@ -44,6 +45,7 @@ x = -{b} / 2 * {a} = {round(topx, 4)}
 y = -{round(diskrimi, 4)} / 4 * {a} = {round(topy, 4)}""")
         print("""-----------------------------------------""")
 
+
 def fixfloat(num):
     if "," in num:
         num = [x for x in num]
@@ -56,6 +58,7 @@ def fixfloat(num):
     else:
         num = eval(num)
     return float(num)
+
 
 while True:
     print("""----------Andengrads Funktioner----------
