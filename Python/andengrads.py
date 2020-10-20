@@ -31,6 +31,9 @@ def andengrad(a, b, c, mellem):
         print("Rod 2: " + str(round(r2, 2)))
 
     elif mellem.lower() == "j":
+        a = round(a, 4)
+        b = round(b, 4)
+        c = round(c, 4)
         print(f"""Diskriminant:
 {b}² - (4 * {a} * {c}) = {round(diskrimi, 4)}""")
         print(f"""Rødder:
@@ -41,6 +44,18 @@ x = -{b} / 2 * {a} = {round(topx, 4)}
 y = -{round(diskrimi, 4)} / 4 * {a} = {round(topy, 4)}""")
         print("""-----------------------------------------""")
 
+def fixfloat(num):
+    if "," in num:
+        num = [x for x in num]
+        for i in num:
+            if i == ",":
+                value = num.index(i)
+                num.pop(value)
+                num.insert(value, ".")
+        num = float("".join(num))
+    else:
+        num = eval(num)
+    return float(num)
 
 while True:
     print("""----------Andengrads Funktioner----------
@@ -52,21 +67,24 @@ while True:
         elif a.lower() == "c":
             os.system("cls")
             continue
-        a = float(a)
+        else:
+            a = fixfloat(a)
         b = input("""            Indsæt b værdi: """)
         if b.lower() == "q":
             break
         elif b.lower() == "c":
             os.system("cls")
             continue
-        b = float(b)
+        else:
+            b = fixfloat(b)
         c = input("""            Indsæt c værdi: """)
         if c.lower() == "q":
             break
         elif c.lower() == "c":
             os.system("cls")
             continue
-        c = float(c)
+        else:
+            c = fixfloat(c)
         mellem = str(input("""Vil du have mellemregninger med? (j/n): """))
         print("------------------------------------------")
         if mellem.lower() == "j" or mellem.lower() == "n":
