@@ -3,6 +3,7 @@ import re
 from sympy import Matrix, lcm
 from prettytable import PrettyTable
 import os
+import sys
 
 os.system('mode con: cols=100 lines=10')
 
@@ -70,13 +71,13 @@ while True:
         if reactants == "c":
             continue
         elif reactants == "q":
-            os.system("exit")
+            sys.exit()
         print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.")
         products = input("Produkter: ")
         if products == "c":
             continue
         elif products == "q":
-            os.system("exit")
+            sys.exit()
         reactants = reactants.replace(' ', '').split("+")
         products = products.replace(' ', '').split("+")
         productsSym = ["+ "+i if reactants.index(i) != 0 else i for i in reactants] + ["+ "+x if products.index(x) != 0 else "-> " + x for x in products]
@@ -121,13 +122,13 @@ while True:
         if knownMassIndex == "c":
             continue
         elif knownMassIndex == "q":
-            os.system("exit")
+            sys.exit()
         knownMassIndex = int(knownMassIndex) - 1
         knownMass = input(f"Hvad er massen af {substances[knownMassIndex]} i gram?: ")
         if knownMass == "c":
             continue
         if knownMass == "q":
-            os.system("exit")
+            sys.exit()
         knownMass = fixfloat(knownMass)
 
         oneKnownMol = knownMass / molMass[knownMassIndex] / coEffiList[knownMassIndex]
@@ -155,7 +156,7 @@ while True:
         print(x)
 
         if input("\nTryk enter for at starte igen") == "q":
-            os.system("exit")
+            sys.exit()
 
     except Exception as e:
         print(f"Der skete en fejl", 2*"\n", e, "\n")
