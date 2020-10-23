@@ -155,7 +155,7 @@ while True:
         print(x)
 
         if input("\nTryk enter for at starte igen") == "q":
-            quit()
+            os.system("exit")
 
     except Exception as e:
         print(f"Der skete en fejl", 2*"\n", e, "\n")
