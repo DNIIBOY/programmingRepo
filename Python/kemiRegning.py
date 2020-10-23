@@ -70,13 +70,13 @@ while True:
         if reactants == "c":
             continue
         elif reactants == "q":
-            quit()
+            os.system("exit")
         print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.")
         products = input("Produkter: ")
         if products == "c":
             continue
         elif products == "q":
-            quit()
+            os.system("exit")
         reactants = reactants.replace(' ', '').split("+")
         products = products.replace(' ', '').split("+")
         productsSym = ["+ "+i if reactants.index(i) != 0 else i for i in reactants] + ["+ "+x if products.index(x) != 0 else "-> " + x for x in products]
@@ -121,13 +121,13 @@ while True:
         if knownMassIndex == "c":
             continue
         elif knownMassIndex == "q":
-            quit()
+            os.system("exit")
         knownMassIndex = int(knownMassIndex) - 1
         knownMass = input(f"Hvad er massen af {substances[knownMassIndex]} i gram?: ")
         if knownMass == "c":
             continue
         if knownMass == "q":
-            quit()
+            os.system("exit")
         knownMass = fixfloat(knownMass)
 
         oneKnownMol = knownMass / molMass[knownMassIndex] / coEffiList[knownMassIndex]
