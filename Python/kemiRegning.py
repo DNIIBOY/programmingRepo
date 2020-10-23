@@ -6,6 +6,7 @@ import os
 
 os.system('mode con: cols=100 lines=10')
 
+
 def addToMatrix(element, index, count, side):
     if index == len(elementMatrix):
         elementMatrix.append([])
@@ -78,7 +79,7 @@ while True:
             quit()
         reactants = reactants.replace(' ', '').split("+")
         products = products.replace(' ', '').split("+")
-        productsSym = ["+ "+i if reactants.index(i) != 0 else i for i in reactants ] + ["+ "+x if products.index(x) != 0 else "-> " + x for x in products]
+        productsSym = ["+ "+i if reactants.index(i) != 0 else i for i in reactants] + ["+ "+x if products.index(x) != 0 else "-> " + x for x in products]
 
         substances = reactants + products
         molMass = [Formula(x).mass for x in substances]
