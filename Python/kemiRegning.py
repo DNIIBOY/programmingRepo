@@ -5,7 +5,7 @@ from prettytable import PrettyTable
 import os
 import sys
 
-os.system('mode con: cols=100 lines=10')
+os.system('mode con: cols=120 lines=15')
 
 
 def addToMatrix(element, index, count, side):
@@ -47,6 +47,38 @@ def compoundDecipher(compound, index, side):
         findElements(segment, index, multiplier, side)
 
 
+def balance():
+    autoBalance = input("Skal reaktionsskemaet automatisk afstemmes? (j/n): ")
+    if autoBalance.lower() == "j":
+        global elementMatrix
+        for i in range(len(reactants)):
+            compoundDecipher(reactants[i], i, 1)
+        for i in range(len(products)):
+            compoundDecipher(products[i], i + len(reactants), -1)
+        elementMatrix = Matrix(elementMatrix)
+        elementMatrix = elementMatrix.transpose()
+        solution = elementMatrix.nullspace()[0]
+        multiple = lcm([val.q for val in solution])
+        solution = multiple * solution
+        coEffi = solution.tolist()
+        return [coEffi[i][0] for i in range(len(reactants))] + [coEffi[i + len(reactants)][0] for i in range(len(products))]
+    elif autoBalance.lower() == "n":
+        global productsSym
+        global molMass
+        global substances
+        global productsSym
+        os.system("cls")
+        x = PrettyTable()
+        x.field_names = ["Af: Daniel Nettelfield"] + productsSym
+        x.add_row(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass])
+        x.add_row(["Index Værdi"] + [str(i + 1) for i in range(len(substances))])
+        print(x)
+        return [int(input(f"Indsæt koefficient {i}: ")) for i in range(1, len(substances) + 1)]
+    else:
+        print("Ugyldigt input")
+        return balance()
+
+
 def fixfloat(num):
     if "," in num:
         num = [x for x in num]
@@ -85,29 +117,7 @@ while True:
         substances = reactants + products
         molMass = [Formula(x).mass for x in substances]
 
-        for i in range(len(reactants)):
-            compoundDecipher(reactants[i], i, 1)
-        for i in range(len(products)):
-            compoundDecipher(products[i], i + len(reactants), -1)
-        elementMatrix = Matrix(elementMatrix)
-        elementMatrix = elementMatrix.transpose()
-        solution = elementMatrix.nullspace()[0]
-        multiple = lcm([val.q for val in solution])
-        solution = multiple * solution
-        coEffi = solution.tolist()
-        output = ""
-        coEffiList = []
-        for i in range(len(reactants)):
-            output += str(coEffi[i][0]) + reactants[i]
-            if i < len(reactants) - 1:
-                output += " + "
-            coEffiList.append(coEffi[i][0])
-        output += " -> "
-        for i in range(len(products)):
-            output += str(coEffi[i + len(reactants)][0]) + products[i]
-            if i < len(products) - 1:
-                output += " + "
-            coEffiList.append(coEffi[i + len(reactants)][0])
+        coEffiList = balance()
 
         x = PrettyTable()
         x.field_names = ["Af: Daniel Nettelfield"] + productsSym
