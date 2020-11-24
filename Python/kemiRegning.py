@@ -7,10 +7,14 @@ import re
 from sympy import Matrix, lcm
 import os
 import sys
+import xlwt
+from tempfile import TemporaryFile
 
+fileName = "kemi.xls"
 os.system('mode con: cols=80 lines=15')
 pretty.install()
 console = Console()
+
 
 def addToMatrix(element, index, count, side):
     if index == len(elementMatrix):
@@ -51,7 +55,7 @@ def compoundDecipher(compound, index, side):
         findElements(segment, index, multiplier, side)
 
 
-def balance():
+def balance(productsSym, molMass, substances):
     global console
     console.print("Skal reaktionsskemaet automatisk afstemmes? ([green]j[/green]/[red]n[/red]): ", end="")
     autoBalance = input()
@@ -69,10 +73,6 @@ def balance():
         coEffi = solution.tolist()
         return [coEffi[i][0] for i in range(len(reactants))] + [coEffi[i + len(reactants)][0] for i in range(len(products))]
     elif autoBalance.lower() == "n":
-        global productsSym
-        global molMass
-        global substances
-        global productsSym
         console.clear()
         x = Table(show_header=True, header_style="cyan")
         x.add_column("Af: Daniel Nettelfield")
@@ -87,7 +87,7 @@ def balance():
         sys.exit()
     else:
         console.print("Ugyldigt input")
-        return balance()
+        return balance(productsSym, molMass, substances)
 
 
 def fixfloat(num):
@@ -130,7 +130,7 @@ while True:
         substances = reactants + products
         molMass = [Formula(x).mass for x in substances]
 
-        coEffiList = balance()
+        coEffiList = balance(productsSym, molMass, substances)
 
         x = Table(show_header=True, header_style="cyan")
         x.add_column("Af: Daniel Nettelfield")
@@ -185,10 +185,28 @@ while True:
         console.clear()
         console.print(x)
 
-        if input("\nTryk enter for at starte igen") == "q":
+        option = input("\nTryk enter for at starte igen")
+        if option.lower() == "q":
             console.clear()
             sys.exit()
+        elif option.lower() == "e":
+            book = xlwt.Workbook()
+            sheet = book.add_sheet("Daniels Ting")
+            kol1 = ["Af: Daniel Nettelfield", "Koefficient", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
+            for i, e in enumerate(kol1):
+                sheet.write(i, 0, e)
+            print(productsSym, coEffiList, n, molMass, massList)
+            for x in productsSym:
+                y = productsSym.index(x)
+                z = [x, coEffiList[y], [round(i, 4) for i in n][y], [round(i, 4) for i in molMass][y], [round(i, 4) for i in massList][y]]
+                print(z)
+                for i, e in enumerate(z):
+                    sheet.write(i, y+1, e)
+
+            book.save(fileName)
+            book.save(TemporaryFile())
 
     except Exception as e:
+        raise
         console.print(f"Der skete en fejl", 2*"\n", e, "\n")
         input("Tryk enter for at prøve igen")
