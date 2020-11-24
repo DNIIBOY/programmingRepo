@@ -1,12 +1,16 @@
+from rich import *
+from rich.table import Table
+from rich.console import Console
+from rich import pretty
 from molmass import Formula
 import re
 from sympy import Matrix, lcm
-from prettytable import PrettyTable
 import os
 import sys
 
-os.system('mode con: cols=120 lines=15')
-
+os.system('mode con: cols=80 lines=15')
+pretty.install()
+console = Console()
 
 def addToMatrix(element, index, count, side):
     if index == len(elementMatrix):
@@ -48,7 +52,9 @@ def compoundDecipher(compound, index, side):
 
 
 def balance():
-    autoBalance = input("Skal reaktionsskemaet automatisk afstemmes? (j/n): ")
+    global console
+    console.print("Skal reaktionsskemaet automatisk afstemmes? ([green]j[/green]/[red]n[/red]): ", end="")
+    autoBalance = input()
     if autoBalance.lower() == "j":
         global elementMatrix
         for i in range(len(reactants)):
@@ -67,15 +73,20 @@ def balance():
         global molMass
         global substances
         global productsSym
-        os.system("cls")
-        x = PrettyTable()
-        x.field_names = ["Af: Daniel Nettelfield"] + productsSym
-        x.add_row(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass])
-        x.add_row(["Index Værdi"] + [str(i + 1) for i in range(len(substances))])
-        print(x)
+        console.clear()
+        x = Table(show_header=True, header_style="cyan")
+        x.add_column("Af: Daniel Nettelfield")
+        for i in productsSym:
+            x.add_column(i)
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
+        x.add_row(*(["Index Værdi"] + [str(i + 1) for i in range(len(substances))]))
+        console.print(x)
         return [int(input(f"Indsæt koefficient {i}: ")) for i in range(1, len(substances) + 1)]
+    elif autoBalance.lower() == "q":
+        console.clear()
+        sys.exit()
     else:
-        print("Ugyldigt input")
+        console.print("Ugyldigt input")
         return balance()
 
 
@@ -94,21 +105,23 @@ def fixfloat(num):
 
 
 while True:
-    os.system("cls")
+    console.clear()
     try:
         elementList = []
         elementMatrix = []
-        print("Indsæt reaktanter, husk store og små bogstaver og ingen koefficienter.")
-        reactants = input("Reaktanter: ")
+        console.print("Indsæt reaktanter, husk store og små bogstaver og ingen koefficienter.", "[blue]Reaktanter: [/blue]", end="")
+        reactants = input()
         if reactants == "c":
             continue
         elif reactants == "q":
+            console.clear()
             sys.exit()
-        print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.")
-        products = input("Produkter: ")
+        console.print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.", "[blue]Produkter: [/blue]", end="")
+        products = input()
         if products == "c":
             continue
         elif products == "q":
+            console.clear()
             sys.exit()
         reactants = reactants.replace(' ', '').split("+")
         products = products.replace(' ', '').split("+")
@@ -119,25 +132,29 @@ while True:
 
         coEffiList = balance()
 
-        x = PrettyTable()
-        x.field_names = ["Af: Daniel Nettelfield"] + productsSym
-        x.add_row(["Koefficient"] + [str(i) for i in coEffiList])
-        x.add_row(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass])
-        x.add_row(["Index Værdi"] + [str(i+1) for i in range(len(substances))])
+        x = Table(show_header=True, header_style="cyan")
+        x.add_column("Af: Daniel Nettelfield")
+        for i in productsSym:
+            x.add_column(i)
+        x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
+        x.add_row(*(["Index Værdi"] + [str(i+1) for i in range(len(substances))]))
 
-        os.system("cls")
-        print(x)
+        console.clear()
+        console.print(x)
 
         knownMassIndex = input("Indsæt index værdi af stoffet med en kendt masse: ")
         if knownMassIndex == "c":
             continue
         elif knownMassIndex == "q":
+            console.clear()
             sys.exit()
         knownMassIndex = int(knownMassIndex) - 1
         knownMass = input(f"Hvad er massen af {substances[knownMassIndex]} i gram?: ")
         if knownMass == "c":
             continue
         if knownMass == "q":
+            console.clear()
             sys.exit()
         knownMass = fixfloat(knownMass)
 
@@ -156,18 +173,22 @@ while True:
         massList.insert(knownMassIndex, knownMass)
         n.insert(knownMassIndex, knownMass / molMass[knownMassIndex])
 
-        x.clear_rows()
-        x.add_row(["Koefficient"] + [str(i) for i in coEffiList])
-        x.add_row(["Stofmængde [mol]"] + [str(round(i, 4)) for i in n])
-        x.add_row(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass])
-        x.add_row(["Masse [g]"] + [str(round(i, 4)) for i in massList])
+        x = Table(show_header=True, header_style="cyan")
+        x.add_column("Af: Daniel Nettelfield")
+        for i in productsSym:
+            x.add_column(i)
+        x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
+        x.add_row(*(["Stofmængde [mol]"] + [str(round(i, 4)) for i in n]))
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
+        x.add_row(*(["Masse [g]"] + [str(round(i, 4)) for i in massList]))
 
-        os.system("cls")
-        print(x)
+        console.clear()
+        console.print(x)
 
         if input("\nTryk enter for at starte igen") == "q":
+            console.clear()
             sys.exit()
 
     except Exception as e:
-        print(f"Der skete en fejl", 2*"\n", e, "\n")
+        console.print(f"Der skete en fejl", 2*"\n", e, "\n")
         input("Tryk enter for at prøve igen")
