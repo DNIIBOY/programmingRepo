@@ -185,28 +185,28 @@ while True:
         console.clear()
         console.print(x)
 
-        option = input("\nTryk enter for at starte igen")
+        option = input("\nTast (e) for at eksportere. Tryk enter for at starte igen: ")
         if option.lower() == "q":
             console.clear()
             sys.exit()
         elif option.lower() == "e":
             book = xlwt.Workbook()
             sheet = book.add_sheet("Daniels Ting")
-            kol1 = ["Af: Daniel Nettelfield", "Koefficient", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
-            for i, e in enumerate(kol1):
+            first_col = sheet.col(0)
+            first_col.width = 256*20
+            col1 = ["Af: Daniel Nettelfield", "Koefficienter", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
+            for i, e in enumerate(col1):
                 sheet.write(i, 0, e)
-            print(productsSym, coEffiList, n, molMass, massList)
             for x in productsSym:
                 y = productsSym.index(x)
-                z = [x, coEffiList[y], [round(i, 4) for i in n][y], [round(i, 4) for i in molMass][y], [round(i, 4) for i in massList][y]]
-                print(z)
+                z = [x, int(coEffiList[y]), [float(round(i, 4)) for i in n][y], [float(round(i, 4)) for i in molMass][y], [float(round(i, 4)) for i in massList][y]]
                 for i, e in enumerate(z):
                     sheet.write(i, y+1, e)
 
             book.save(fileName)
             book.save(TemporaryFile())
+            input(f"Skema eksporteret til {fileName}")
 
     except Exception as e:
-        raise
         console.print(f"Der skete en fejl", 2*"\n", e, "\n")
         input("Tryk enter for at prøve igen")
