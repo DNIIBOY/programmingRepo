@@ -8,9 +8,10 @@ from sympy import Matrix, lcm
 import os
 import sys
 import xlwt
+import pyexcel as p
 from tempfile import TemporaryFile
 
-fileName = "kemi.xls"
+fileName = "kemi"
 os.system('mode con: cols=80 lines=15')
 pretty.install()
 console = Console()
@@ -203,9 +204,13 @@ while True:
                 for i, e in enumerate(z):
                     sheet.write(i, y+1, e)
 
-            book.save(fileName)
+            book.save(str(fileName+".xls"))
             book.save(TemporaryFile())
-            input(f"Skema eksporteret til {fileName}")
+
+            p.save_book_as(file_name=str(fileName + ".xls"), dest_file_name=str(fileName + ".xlsx"))
+            os.remove(str(fileName + ".xls"))
+
+            input(f"Skema eksporteret til {str(fileName+'.xlsx')}")
 
     except Exception as e:
         console.print(f"Der skete en fejl", 2*"\n", e, "\n")
