@@ -51,9 +51,7 @@ class WordSaver:
 
     # Function for emptying the file with the filename of the object
     def emptyfile(self):
-        fil = open(self.fileName, "w")
-        fil.write("")
-        fil.close()
+        os.remove(self.fileName)
 
     # Encrypt the file using the key entered by the user in the write() function
     def encrypt(self, key):
