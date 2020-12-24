@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace SoloLearn
+namespace gamer
 {
     class Program
     {
         static void Main(string[] args)
         {
-
+            int x = 0;
+            int y = 0;
         }
     }
 }
