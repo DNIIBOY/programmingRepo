@@ -7,11 +7,11 @@ import re
 from sympy import Matrix, lcm
 import os
 import sys
-import xlwt
-import pyexcel as p
-from tempfile import TemporaryFile
+import xlsxwriter
 
 fileName = "kemi"
+decimals = 4
+
 os.system('mode con: cols=80 lines=15')
 pretty.install()
 console = Console()
@@ -79,7 +79,7 @@ def balance(productsSym, molMass, substances):
         x.add_column("Af: Daniel Nettelfield")
         for i in productsSym:
             x.add_column(i)
-        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
         x.add_row(*(["Index Værdi"] + [str(i + 1) for i in range(len(substances))]))
         console.print(x)
         return [int(input(f"Indsæt koefficient {i}: ")) for i in range(1, len(substances) + 1)]
@@ -138,7 +138,7 @@ while True:
         for i in productsSym:
             x.add_column(i)
         x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
-        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
         x.add_row(*(["Index Værdi"] + [str(i+1) for i in range(len(substances))]))
 
         console.clear()
@@ -179,9 +179,9 @@ while True:
         for i in productsSym:
             x.add_column(i)
         x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
-        x.add_row(*(["Stofmængde [mol]"] + [str(round(i, 4)) for i in n]))
-        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, 4)) for i in molMass]))
-        x.add_row(*(["Masse [g]"] + [str(round(i, 4)) for i in massList]))
+        x.add_row(*(["Stofmængde [mol]"] + [str(round(i, decimals)) for i in n]))
+        x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
+        x.add_row(*(["Masse [g]"] + [str(round(i, decimals)) for i in massList]))
 
         console.clear()
         console.print(x)
@@ -191,25 +191,19 @@ while True:
             console.clear()
             sys.exit()
         elif option.lower() == "e":
-            book = xlwt.Workbook()
-            sheet = book.add_sheet("Daniels Ting")
-            first_col = sheet.col(0)
-            first_col.width = 256*20
+            book = xlsxwriter.Workbook(fileName + ".xlsx")
+            sheet = book.add_worksheet("Daniels Ting")
+            sheet.set_column("A:A", 20)
             col1 = ["Af: Daniel Nettelfield", "Koefficienter", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
             for i, e in enumerate(col1):
                 sheet.write(i, 0, e)
             for x in productsSym:
                 y = productsSym.index(x)
-                z = [x, int(coEffiList[y]), [float(round(i, 4)) for i in n][y], [float(round(i, 4)) for i in molMass][y], [float(round(i, 4)) for i in massList][y]]
+                z = [x, int(coEffiList[y]), float(round(n[y], decimals)), float(round(molMass[y], decimals)), float(round(massList[y], decimals))]
                 for i, e in enumerate(z):
                     sheet.write(i, y+1, e)
 
-            book.save(str(fileName+".xls"))
-            book.save(TemporaryFile())
-
-            p.save_book_as(file_name=str(fileName + ".xls"), dest_file_name=str(fileName + ".xlsx"))
-            os.remove(str(fileName + ".xls"))
-
+            book.close()
             input(f"Skema eksporteret til {str(fileName+'.xlsx')}")
 
     except Exception as e:
