@@ -90,6 +90,31 @@ def balance(productsSym, molMass, substances):
         console.print("Ugyldigt input")
         return balance(productsSym, molMass, substances)
 
+def export(productsSym, coEffiList, n, molMass, massList):
+    try:
+        book = xlsxwriter.Workbook(fileName + ".xlsx")
+        sheet = book.add_worksheet("Daniels Ting")
+        sheet.set_column("A:A", 20)
+        col1 = ["Af: Daniel Nettelfield", "Koefficienter", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
+        for i, e in enumerate(col1):
+            sheet.write(i, 0, e)
+        for x in productsSym:
+            y = productsSym.index(x)
+            z = [x, int(coEffiList[y]), float(round(n[y], decimals)), float(round(molMass[y], decimals)), float(round(massList[y], decimals))]
+            for i, e in enumerate(z):
+                sheet.write(i, y + 1, e)
+        book.close()
+        input(f"Skema eksporteret til {str(fileName + '.xlsx')}")
+    except Exception as e:
+        console.print(f"\nDer skete en fejl", 2*"\n", e, 2*"\n",
+                      "Enter for prøve igen, [blue]c[/blue] for at genstarte programmet", end="", sep="")
+        re = input()
+        if re == "q":
+            sys.exit()
+        elif re == "c":
+            return
+        else:
+            return export(productsSym, coEffiList, n, molMass, massList)
 
 def fixfloat(num):
     if "," in num:
@@ -191,20 +216,7 @@ while True:
             console.clear()
             sys.exit()
         elif option.lower() == "e":
-            book = xlsxwriter.Workbook(fileName + ".xlsx")
-            sheet = book.add_worksheet("Daniels Ting")
-            sheet.set_column("A:A", 20)
-            col1 = ["Af: Daniel Nettelfield", "Koefficienter", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
-            for i, e in enumerate(col1):
-                sheet.write(i, 0, e)
-            for x in productsSym:
-                y = productsSym.index(x)
-                z = [x, int(coEffiList[y]), float(round(n[y], decimals)), float(round(molMass[y], decimals)), float(round(massList[y], decimals))]
-                for i, e in enumerate(z):
-                    sheet.write(i, y+1, e)
-
-            book.close()
-            input(f"Skema eksporteret til {str(fileName+'.xlsx')}")
+            export(productsSym, coEffiList, n, molMass, massList)
 
     except Exception as e:
         console.print(f"Der skete en fejl", 2*"\n", e, "\n")
