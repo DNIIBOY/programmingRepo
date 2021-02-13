@@ -72,7 +72,8 @@ def balance(productsSym, molMass, substances):
         multiple = lcm([val.q for val in solution])
         solution = multiple * solution
         coEffi = solution.tolist()
-        return [coEffi[i][0] for i in range(len(reactants))] + [coEffi[i + len(reactants)][0] for i in range(len(products))]
+        return [coEffi[i][0] for i in range(len(reactants))] + [coEffi[i + len(reactants)][0] for i in
+                                                                range(len(products))]
     elif autoBalance.lower() == "n":
         console.clear()
         x = Table(show_header=True, header_style="cyan")
@@ -90,7 +91,8 @@ def balance(productsSym, molMass, substances):
         console.print("Ugyldigt input")
         return balance(productsSym, molMass, substances)
 
-def export(productsSym, coEffiList, n, molMass, massList):
+
+def export(productsSym, coEffiList, n, molMass, massList, inputIndex):
     try:
         book = xlsxwriter.Workbook(fileName + ".xlsx")
         sheet = book.add_worksheet("Daniels Ting")
@@ -98,23 +100,34 @@ def export(productsSym, coEffiList, n, molMass, massList):
         col1 = ["Af: Daniel Nettelfield", "Koefficienter", "Stofmængde [mol]", "Molare Masse [g/mol]", "Masse [g]"]
         for i, e in enumerate(col1):
             sheet.write(i, 0, e)
+
         for x in productsSym:
             y = productsSym.index(x)
-            z = [x, int(coEffiList[y]), float(round(n[y], decimals)), float(round(molMass[y], decimals)), float(round(massList[y], decimals))]
+            z = [x, int(coEffiList[y])]
             for i, e in enumerate(z):
-                sheet.write(i, y + 1, e)
+                sheet.write(i, y+1, e)
+            sheet.write(3, y+1, float(round(molMass[y], decimals)))
+            if y == inputIndex-1:
+                sheet.write(4, y+1, float(round(massList[y], decimals)))
+                sheet.write_formula(2, y+1, f"={chr(y+66)}5/{chr(y+66)}4")
+            else:
+                sheet.write_formula(2, y+1, f"={chr(y+66)}2/{chr(inputIndex+65)}2*{chr(inputIndex+65)}3")
+                sheet.write_formula(4, y+1, f"={chr(y+66)}3*{chr(y+66)}4")
+
         book.close()
         input(f"Skema eksporteret til {str(fileName + '.xlsx')}")
+
     except Exception as e:
-        console.print(f"\nDer skete en fejl", 2*"\n", e, 2*"\n",
-                      "Enter for prøve igen, [blue]c[/blue] for at genstarte programmet", end="", sep="")
+        print(f"\nDer skete en fejl", 2 * "\n", e, 2 * "\n",
+              "Enter for prøve igen, [blue]c[/blue] for at genstarte programmet", end="", sep="")
         re = input()
         if re == "q":
             sys.exit()
         elif re == "c":
             return
         else:
-            return export(productsSym, coEffiList, n, molMass, massList)
+            return export(productsSym, coEffiList, n, molMass, massList, inputIndex)
+
 
 def fixfloat(num):
     if "," in num:
@@ -135,14 +148,16 @@ while True:
     try:
         elementList = []
         elementMatrix = []
-        console.print("Indsæt reaktanter, husk store og små bogstaver og ingen koefficienter.", "[blue]Reaktanter: [/blue]", end="")
+        console.print("Indsæt reaktanter, husk store og små bogstaver og ingen koefficienter.",
+                      "[blue]Reaktanter: [/blue]", end="")
         reactants = input()
         if reactants == "c":
             continue
         elif reactants == "q":
             console.clear()
             sys.exit()
-        console.print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.", "[blue]Produkter: [/blue]", end="")
+        console.print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.",
+                      "[blue]Produkter: [/blue]", end="")
         products = input()
         if products == "c":
             continue
@@ -151,7 +166,8 @@ while True:
             sys.exit()
         reactants = reactants.replace(' ', '').split("+")
         products = products.replace(' ', '').split("+")
-        productsSym = ["+ "+i if reactants.index(i) != 0 else i for i in reactants] + ["+ "+x if products.index(x) != 0 else "-> " + x for x in products]
+        productsSym = ["+ " + i if reactants.index(i) != 0 else i for i in reactants] + [
+            "+ " + x if products.index(x) != 0 else "-> " + x for x in products]
 
         substances = reactants + products
         molMass = [Formula(x).mass for x in substances]
@@ -164,7 +180,7 @@ while True:
             x.add_column(i)
         x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
         x.add_row(*(["Molare Masse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
-        x.add_row(*(["Index Værdi"] + [str(i+1) for i in range(len(substances))]))
+        x.add_row(*(["Index Værdi"] + [str(i + 1) for i in range(len(substances))]))
 
         console.clear()
         console.print(x)
@@ -190,8 +206,8 @@ while True:
         calcCoEffi = coEffiList.pop(knownMassIndex)
         calcMolMass = molMass.pop(knownMassIndex)
 
-        n = [sub*oneKnownMol for sub in coEffiList]
-        massList = [n[i]*molMass[i] for i in range(len(substances))]
+        n = [sub * oneKnownMol for sub in coEffiList]
+        massList = [n[i] * molMass[i] for i in range(len(substances))]
 
         substances.insert(knownMassIndex, calcSub)
         coEffiList.insert(knownMassIndex, calcCoEffi)
@@ -216,8 +232,8 @@ while True:
             console.clear()
             sys.exit()
         elif option.lower() == "e":
-            export(productsSym, coEffiList, n, molMass, massList)
+            export(productsSym, coEffiList, n, molMass, massList, knownMassIndex+1)
 
     except Exception as e:
-        console.print(f"Der skete en fejl", 2*"\n", e, "\n")
+        console.print(f"Der skete en fejl", 2 * "\n", e, "\n")
         input("Tryk enter for at prøve igen")
