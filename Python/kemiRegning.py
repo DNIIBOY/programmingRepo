@@ -113,7 +113,9 @@ def export(productsSym, coEffiList, n, molMass, massList, inputIndex):
                 sheet.write_formula(4, y + 1, f"={chr(y + 66)}3*{chr(y + 66)}4")
 
         book.close()
+        os.system(f"{fileName}.xlsx")
         input(f"Skema eksporteret til {str(fileName + '.xlsx')}")
+
 
     except Exception as e:
         print(f"\nDer skete en fejl", 2 * "\n", e, 2 * "\n",
@@ -123,6 +125,98 @@ def export(productsSym, coEffiList, n, molMass, massList, inputIndex):
             return
         else:
             return export(productsSym, coEffiList, n, molMass, massList, inputIndex)
+
+
+def titration():
+    try:
+        console.clear()
+        console.print("Indsæt titrant, husk store og små bogstaver.", "[blue]Titrant: [/blue]", sep="\n", end="")
+        titrant = input()
+        if consider(titrant) == "c":
+            return
+        console.print("Indsæt titrator, husk store og små bogstaver.", "[blue]Titrator: [/blue]", sep="\n", end="")
+        titrator = input()
+        if consider(titrator) == "c":
+            return
+        console.clear()
+        console.print(f"Titrant volumen i [blue]liter[/blue] ([green]{titrant}[/green]): ", end="")
+        v_titrant = input()
+        if consider(v_titrant) == "c":
+            return
+        else:
+            v_titrant = fixfloat(v_titrant)
+
+        console.print(f"Titrator volumen i [blue]liter[/blue] ([green]{titrator}[/green]): ", end="")
+        v_titrator = input()
+        if consider(v_titrator) == "c":
+            return
+        else:
+            v_titrator = fixfloat(v_titrator)
+
+        console.print(f"Titrator koncentration i [blue]mol/L[/blue] ([green]{titrator}[/green]): ", end="")
+        c_titrator = input()
+        if consider(c_titrator) == "c":
+            return
+        else:
+            c_titrator = fixfloat(c_titrator)
+
+        n_tit = c_titrator * v_titrator
+        c_titrant = n_tit / v_titrant
+        titrationTable(titrant, titrator, v_titrant, v_titrator, float(c_titrant), float(c_titrator), n_tit)
+
+    except ValueError:
+        console.print("Skal være et tal, prøv igen")
+        input()
+        return titration()
+    except Exception as e:
+        console.print(f"Der skete en fejl", 2 * "\n", e, "\n")
+        input("Tryk enter for at prøve igen")
+
+
+def titrationTable(titrant, titrator, v_titrant, v_titrator, c_titrant, c_titrator, n_tit):
+    # print([type(x) for x in [v_titrant, v_titrator, c_titrator, c_titrator, n_tit]])
+    v_titrant, v_titrator, c_titrator, c_titrator, n_tit = [round(x, decimals) for x in [v_titrant, v_titrator, c_titrator, c_titrator, n_tit]]
+    titTable = Table(show_header=True, header_style="cyan")
+    [titTable.add_column(x) for x in ["Af: Daniel Nettelfield", "Titrator", "Titrant"]]
+    titTable.add_row(*(["Stof", str(titrator), str(titrant)]))
+    titTable.add_row(*(["Stofmængde \[mol]", str(n_tit), str(n_tit)]))
+    titTable.add_row(*(["Volumen \[L]", str(v_titrator), str(v_titrant)]))
+    titTable.add_row(*(["Koncentration \[mol/L]", str(c_titrator), str(c_titrant)]))
+    console.clear()
+    console.print(titTable)
+    option = input("\nTast (e) for at eksportere. Tryk enter for at starte igen: ")
+    consider(option)
+    if option.lower() == "e":
+        return exportTitration(titrant, titrator, v_titrant, v_titrator, c_titrator)
+
+
+def exportTitration(titrant, titrator, v_titrant, v_titrator , c_titrator):
+    try:
+        book = xlsxwriter.Workbook(fileName + ".xlsx")
+        sheet = book.add_worksheet("Titrering")
+        sheet.set_column("A:A", 24)
+        col1 = ["Af: Daniel Nettelfield", "Stof", "Stofmængde [mol]", "Volumen [L]", "Koncentration [mol/L]"]
+        for y, x in enumerate(col1):
+            sheet.write(y, 0, x)
+
+        for y, x in enumerate(["Titrator", titrator, "=B5*B4", v_titrator, c_titrator]):
+            sheet.write(y, 1, x)
+
+        for y, x in enumerate(["Titrant", titrant, "=B3", v_titrant, "=C3/C4"]):
+            sheet.write(y, 2, x)
+
+        book.close()
+        os.system(f"{fileName}.xlsx")
+        input(f"Skema eksporteret til {str(fileName + '.xlsx')}")
+
+    except Exception as e:
+        print(f"\nDer skete en fejl", 2 * "\n", e, 2 * "\n",
+              "Enter for prøve igen, [blue]c[/blue] for at genstarte programmet", end="", sep="")
+        re = input()
+        if consider(re) == "c":
+            return
+        else:
+            return exportTitration(titrant, titrator, v_titrant, v_titrator , c_titrator)
 
 
 def molarTable(subs):
@@ -137,13 +231,7 @@ def molarTable(subs):
 
 def fixfloat(num):
     if "," in num:
-        num = [x for x in num]
-        for i in num:
-            if i == ",":
-                value = num.index(i)
-                num.pop(value)
-                num.insert(value, ".")
-        num = float("".join(num))
+        num = float(num.replace(",", "."))
     else:
         num = eval(num)
     return float(num)
@@ -165,12 +253,15 @@ if __name__ == "__main__":
             elementList = []
             elementMatrix = []
             console.print("Indsæt reaktanter, husk store og små bogstaver og ingen koefficienter.",
-                          "[blue]Reaktanter: [/blue]", end="")
+                          "[blue]Reaktanter: [/blue]", sep="\n", end="")
             reactants = input()
             if consider(reactants) == "c":
                 continue
+            elif reactants == "t":
+                titration()
+                continue
             console.print("Indsæt Produkter, husk store og små bogstaver og ingen koefficienter.",
-                          "[blue]Produkter: [/blue]", end="")
+                          "[blue]Produkter: [/blue]", sep="\n", end="")
             products = input()
 
             if consider(products) == "c":
@@ -233,9 +324,9 @@ if __name__ == "__main__":
             for i in productsSym:
                 x.add_column(i)
             x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
-            x.add_row(*(["Stofmængde [mol]"] + [str(round(i, decimals)) for i in n]))
-            x.add_row(*(["Molarmasse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
-            x.add_row(*(["Masse [g]"] + [str(round(i, decimals)) for i in massList]))
+            x.add_row(*(["Stofmængde \[mol]"] + [str(round(i, decimals)) for i in n]))
+            x.add_row(*(["Molarmasse \[g/mol]"] + [str(round(i, decimals)) for i in molMass]))
+            x.add_row(*(["Masse \[g]"] + [str(round(i, decimals)) for i in massList]))
 
             console.clear()
             console.print(x)
@@ -247,6 +338,5 @@ if __name__ == "__main__":
                 export(productsSym, coEffiList, n, molMass, massList, knownMassIndex + 1)
 
         except Exception as e:
-            raise
             console.print(f"Der skete en fejl", 2 * "\n", e, "\n")
             input("Tryk enter for at prøve igen")
