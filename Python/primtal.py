@@ -9,6 +9,8 @@ def prim(n):
             primtal.append(maybePrime)
     return primtal
 
-user = input("""--------Primtals Generator---------
-Hvad er det højeste primtal du vil se?: """)
-print(prim(user))
+
+while True:
+    user = input("""--------Primtals Generator---------
+    Hvad er det højeste primtal du vil se?: """)
+    print(prim(user))
