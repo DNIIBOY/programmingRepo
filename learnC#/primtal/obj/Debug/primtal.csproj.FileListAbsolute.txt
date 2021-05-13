@@ -1,0 +1,6 @@
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\bin\Debug\primtal.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\bin\Debug\primtal.pdb
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.csprojAssemblyReference.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.csproj.CoreCompileInputs.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.pdb

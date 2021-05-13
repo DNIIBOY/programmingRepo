@@ -1,0 +1,6 @@
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\bin\Debug\testPoop.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\bin\Debug\testPoop.pdb
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\obj\Debug\testPoop.csprojAssemblyReference.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\obj\Debug\testPoop.csproj.CoreCompileInputs.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\obj\Debug\testPoop.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\testPoop\obj\Debug\testPoop.pdb

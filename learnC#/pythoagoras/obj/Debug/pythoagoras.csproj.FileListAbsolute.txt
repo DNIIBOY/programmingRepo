@@ -1,0 +1,6 @@
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\bin\Debug\pythoagoras.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\bin\Debug\pythoagoras.pdb
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\obj\Debug\pythoagoras.csprojAssemblyReference.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\obj\Debug\pythoagoras.csproj.CoreCompileInputs.cache
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\obj\Debug\pythoagoras.exe
+C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\learnC#\pythoagoras\obj\Debug\pythoagoras.pdb
