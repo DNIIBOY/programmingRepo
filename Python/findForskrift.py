@@ -45,3 +45,6 @@ while True:
         print(f"""
         f(x) = {b}*{a}^x""")
         input("\nTryk enter for reset")
+
+    elif mode == "q":
+        quit()
