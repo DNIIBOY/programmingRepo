@@ -8,19 +8,40 @@ while True:
     print("/____/  / .___/\__,_/_/ /_/_/|_|\__/____/_/  \____/_/  /_/ /_/ /_/\___/_/  ")
     print("       /_/                                                                ")
 
-    try:
-        x1, y1, x2, y2, = float(input("Hvad er x1?: ")), float(input("Hvad er y1?: ")), float(input("Hvad er x2?: ")), float(input("Hvad er y2?: "))
-        a = (y1 - y2)/(x1 - x2)
-        b = y1-a*x1
-    except Exception as e:
-        print("\n", e, "\n")
-        input("Tryk enter for at prøve igen")
-        continue
-    y1, y2, x1, x2, a, b, = [round(i, 4) for i in [y1, y2, x1, x2, a, b]]
+    mode = input("(L)ineær eller (E)ksponentiel?: ").lower()
 
-    print(f"""
-a = ({y1} - {y2})/({x1} - {x2}) = {a}
-b = {y1} - {a} * {x1} = {b}
+    if mode == "l":
+        try:
+            x1, y1, x2, y2, = float(input("Hvad er x1?: ")), float(input("Hvad er y1?: ")), float(input("Hvad er x2?: ")), float(input("Hvad er y2?: "))
+            a = (y1 - y2)/(x1 - x2)
+            b = y1-a*x1
+        except Exception as e:
+            print("\n", e, "\n")
+            input("Tryk enter for at prøve igen")
+            continue
+        y1, y2, x1, x2, a, b, = [round(i, 4) for i in [y1, y2, x1, x2, a, b]]
 
-f(x) = {a}x{"+"*(b>0)}{b}""")
-    input("\nTryk enter for reset")
+        print(f"""
+    a = ({y1} - {y2})/({x1} - {x2}) = {a}
+    b = {y1} - {a} * {x1} = {b}
+    
+    f(x) = {a}x{"+"*(b>0)}{b}""")
+        input("\nTryk enter for reset")
+
+    elif mode == "e":
+        try:
+            x1, y1, x2, y2, = float(input("Hvad er x1?: ")), float(input("Hvad er y1?: ")), float(
+                input("Hvad er x2?: ")), float(input("Hvad er y2?: "))
+            a = (y2/y1) ** 1/(x1 - x2)
+            b = y1/(a**x1)
+            if a <0 and b<0:
+                a, b = a*-1, b*-1
+        except Exception as e:
+            print("\n", e, "\n")
+            input("Tryk enter for at prøve igen")
+            continue
+        y1, y2, x1, x2, a, b, = [round(i, 4) for i in [y1, y2, x1, x2, a, b]]
+
+        print(f"""
+        f(x) = {b}*{a}^x""")
+        input("\nTryk enter for reset")
