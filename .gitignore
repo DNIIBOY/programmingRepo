@@ -1,0 +1,7 @@
+/Python/test.py
+*.idea/
+*.xml
+*.iml
+Python/.idea/
+/Python/.idea/
+/Python/.idea/misc.xml
