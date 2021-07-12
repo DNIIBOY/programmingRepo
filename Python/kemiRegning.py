@@ -2,7 +2,7 @@ from rich import *
 from rich.table import Table
 from rich.console import Console
 from rich import pretty
-from molmass import Formula
+from chempy.chemistry import Substance
 import re
 from sympy import Matrix, lcm
 import os
@@ -224,7 +224,7 @@ def molarTable(subs):
     x = Table(show_header=True, header_style="cyan")
     x.add_column("Af: Daniel Nettelfield")
     [x.add_column(i) for i in reactants]
-    x.add_row(*(["Molarmasse"] + [str(Formula(i).mass) for i in subs]))
+    x.add_row(*(["Molarmasse \[g/mol]"] + [str(float(Substance.from_formula(x).molar_mass())) for x in subs]))
     console.print(x)
     consider(input("Tryk enter for at starte igen: "))
 
@@ -278,7 +278,7 @@ if __name__ == "__main__":
                 "+ " + x if products.index(x) != 0 else "-> " + x for x in products]
 
             substances = reactants + products
-            molMass = [Formula(x).mass for x in substances]
+            molMass = [float(Substance.from_formula(x).molar_mass()) for x in substances]
 
             coEffiList = balance(productsSym, molMass, substances)
 
@@ -287,7 +287,7 @@ if __name__ == "__main__":
             for i in productsSym:
                 x.add_column(i)
             x.add_row(*(["Koefficient"] + [str(i) for i in coEffiList]))
-            x.add_row(*(["Molarmasse [g/mol]"] + [str(round(i, decimals)) for i in molMass]))
+            x.add_row(*(["Molarmasse \[g/mol]"] + [str(round(i, decimals)) for i in molMass]))
             x.add_row(*(["Index Værdi"] + [str(i + 1) for i in range(len(substances))]))
 
             console.clear()
