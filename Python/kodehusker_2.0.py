@@ -1,4 +1,4 @@
-#ORDHUSKER 3000
+# ORDHUSKER 3000
 from tkinter import *
 
 running = False
@@ -7,6 +7,7 @@ root = Tk()
 root.minsize(height=40, width=70)
 root.title("Kodehusker 3000")
 root.resizable(0, 0)
+
 
 def intro():
     global start
@@ -33,6 +34,7 @@ def write():
     except:
         print("Der skete en fejl")
 
+
 def read():
     try:
         koode = open("ikkeEnKode.txt", "r")
@@ -42,6 +44,7 @@ def read():
             print("Dit ord er: " + str(fil.read()))
     except:
         print("Der skete en fejl")
+
 
 def koden():
     try:
@@ -56,13 +59,14 @@ def koden():
     except:
         print("Der skete en fejl")
 
+
 def quit():
     run.destroy()
     global running
     running = False
 
 
-def running():
+def main():
     global run
     run = Frame(root)
     run.pack(fill="x", expand=1)
@@ -70,16 +74,17 @@ def running():
     bS = Button(run, text="Skriv").place(x=50, y=10)
     bL = Button(run, text="Læs ").place(x=90, y=10)
     bK = Button(run, text="Kode").place(x=130, y=10)
-    bQ = Button(run, text="Quit", command = quit).place(x=175, y=10)
+    bQ = Button(run, text="Quit", command=quit).place(x=175, y=10)
 
     root.mainloop()
 
+
 def check():
     k = entry1.get()
-    fil = open("ikkeEnKode.txt", "r")
-    if k == fil.read():
-        start.destroy()
-        return running()
-    fil.close()
+    with open("ikkeEnKode.txt", "r") as fil:
+        if k == fil.read():
+            start.destroy()
+            return main()
+
 
 intro()
