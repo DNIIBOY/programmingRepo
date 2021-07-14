@@ -67,7 +67,7 @@ class WordSaver:
     def decrypt(self, key):
         try:
             pyAesCrypt.decryptFile(self.encryptetFileName, self.fileName, key, self.bufferSize)
-            return "Dekrypering Successfuld"
+            return "Dekryptering Successfuld"
         except ValueError:
             return "Forkert Kode!"
         except Exception as e:
