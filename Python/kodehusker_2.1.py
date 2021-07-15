@@ -2,17 +2,19 @@ import dearpygui.dearpygui as dpg
 import os
 import pyAesCrypt
 
-wide, high = (275, 250)
+width, height = (275, 270)
 
-dpg.setup_viewport()
-dpg.set_viewport_title(title='Kodehusker v2.1')
-dpg.set_viewport_width(wide)
-dpg.set_viewport_height(high)
 
-dpg.set_viewport_max_width(wide)
-dpg.set_viewport_min_width(wide)
-dpg.set_viewport_max_height(high)
-dpg.set_viewport_min_height(high)
+def prep_vp(wide, high):
+    dpg.setup_viewport()
+    dpg.set_viewport_title(title='Kodehusker v2.1')
+    dpg.set_viewport_width(wide)
+    dpg.set_viewport_height(high)
+
+    dpg.set_viewport_max_width(wide)
+    dpg.set_viewport_min_width(wide)
+    dpg.set_viewport_max_height(high)
+    dpg.set_viewport_min_height(high)
 
 
 def find_aes_file() -> str:
@@ -49,7 +51,8 @@ class WordSaver:
             self.statusBad = dpg.add_text("", color=[255, 0, 0], show=False, pos=[10, 70])
             dpg.add_text("Text der skal krypteres:", pos=[40, 85])
             # Dette textfelt bruges til Input og Output til filen
-            self.rwfield = dpg.add_input_text(multiline=True, width=wide - 50, height=90, pos=[15, 110], label='')
+            self.rwfield = dpg.add_input_text(multiline=True, width=width - 50, height=90, pos=[15, 110], label='')
+            dpg.add_button(label="Clear", pos=[100, 203], callback=lambda: dpg.set_value(self.rwfield, ""))
 
         with dpg.window(label="Skriv", no_collapse=True, show=False, width=200, height=20,
                         pos=[30, 10], no_resize=True, no_move=True) as self.writeWindow:
@@ -161,6 +164,6 @@ class WordSaver:
 
 if __name__ == '__main__':
     w = WordSaver()
-
+    prep_vp(width, height)
     dpg.set_primary_window(w.mainWindow, True)
     dpg.start_dearpygui()
