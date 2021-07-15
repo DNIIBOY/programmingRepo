@@ -5,16 +5,16 @@ import pyAesCrypt
 width, height = (275, 270)
 
 
-def prep_vp(wide, high):
-    dpg.setup_viewport()
-    dpg.set_viewport_title(title='Kodehusker v2.1')
-    dpg.set_viewport_width(wide)
-    dpg.set_viewport_height(high)
+def prep_vp(wide: int, high: int):
+    vp = dpg.create_viewport(title='Kodehusker v2.1', width=wide, height=high)
+    dpg.set_viewport_maximized_box(False)
+    dpg.set_viewport_small_icon("darkLock.ico")
 
     dpg.set_viewport_max_width(wide)
     dpg.set_viewport_min_width(wide)
     dpg.set_viewport_max_height(high)
     dpg.set_viewport_min_height(high)
+    return vp
 
 
 def find_aes_file() -> str:
@@ -164,6 +164,9 @@ class WordSaver:
 
 if __name__ == '__main__':
     w = WordSaver()
-    prep_vp(width, height)
+    view = prep_vp(width, height)
+    dpg.setup_dearpygui(viewport=view)
     dpg.set_primary_window(w.mainWindow, True)
+
+    dpg.show_viewport(view)
     dpg.start_dearpygui()
