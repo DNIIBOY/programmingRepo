@@ -8,7 +8,7 @@ width, height = (275, 270)
 def prep_vp(wide: int, high: int):
     vp = dpg.create_viewport(title='Kodehusker v2.1', width=wide, height=high)
     dpg.set_viewport_maximized_box(False)
-    dpg.set_viewport_small_icon("darkLock.ico")
+    dpg.set_viewport_small_icon(f"C:\\Users\\{os.getenv('username')}\\Pictures\\darkLock.ico")
 
     dpg.set_viewport_max_width(wide)
     dpg.set_viewport_min_width(wide)
