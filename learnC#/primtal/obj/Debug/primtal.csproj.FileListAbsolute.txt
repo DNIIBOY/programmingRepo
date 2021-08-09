@@ -1,2 +1,0 @@
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.csprojAssemblyReference.cache
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\primtal\obj\Debug\primtal.csproj.CoreCompileInputs.cache

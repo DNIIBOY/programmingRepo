@@ -1,7 +1,0 @@
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\bin\Debug\Learning.exe.config
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\bin\Debug\Learning.exe
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\bin\Debug\Learning.pdb
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\obj\Debug\Learning.csprojAssemblyReference.cache
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\obj\Debug\Learning.csproj.CoreCompileInputs.cache
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\obj\Debug\Learning.exe
-C:\Users\Daniel Nettelfield\Desktop\programmering\programmingRepo\C#\Learning\Learning\obj\Debug\Learning.pdb

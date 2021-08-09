@@ -1,6 +1,0 @@
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\bin\Debug\testing.exe
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\bin\Debug\testing.pdb
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\obj\Debug\testing.csprojAssemblyReference.cache
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\obj\Debug\testing.csproj.CoreCompileInputs.cache
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\obj\Debug\testing.exe
-C:\Users\danie\Desktop\programmering\programmingRepo\learnC#\testing\testing\obj\Debug\testing.pdb
