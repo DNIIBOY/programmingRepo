@@ -20,10 +20,10 @@ void setup()
 
 
 void loop(){
-  spinMotor(dcRelay, 2000);
-  delay(2000);
+  //spinMotor(dcRelay, 2000);
+  //delay(2000);
   servoReturn(servoRelay, 0, 174, moveDelay, relayDelay, 3000);
-  delay(5000);
+  delay(2000);
 }
 
 
