@@ -3,8 +3,6 @@
 *.xml
 *.iml
 Python/.idea/
-/Python/.idea/
-/Python/.idea/misc.xml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
