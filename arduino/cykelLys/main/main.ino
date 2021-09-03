@@ -1,9 +1,13 @@
 #include <Adafruit_NeoPixel.h>
+#include <Wire.h>
+#include <MPU6050.h>
+
+MPU6050 mpu;
 
 const int PIXELPIN = 2;   // input pin Neopixel is attached to
 const int NUMPIXELS = 21; // number of neopixels in strip
 
-const int photoCal = 600;  // Calibration value for photoresistor
+const int photoCal = 800;  // Calibration value for photoresistor
 const int ledOnDelay = 3;
 const int ledOffDelay = 10;
 const int photoPin = 0;
@@ -31,9 +35,21 @@ void setup() {
   Serial.println("Serial conection started, waiting for instructions...");
   pixels.begin();
   setColor(0, 0, 0, allPixels, false);
+
+  // Initialize MPU6050
+  Serial.println("Initialize MPU6050");
+  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
+  {
+    Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
+    delay(500);
+  }
+  mpu.calibrateGyro();
+  mpu.setThreshold(3);
 }
 
 void loop() {
+  Vector rawGyro = mpu.readRawGyro();
+  int xGyr = rawGyro.XAxis;
   int value = analogRead(photoPin);
   Serial.println(value);
   if ((value < photoCal) && (!tailLight || photoCounter > 0)){
