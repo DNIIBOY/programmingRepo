@@ -3,8 +3,15 @@
 
 MPU6050 mpu;
 
+bool moving = false;
+
+int accelCount = 0;
+
+const int ledPIN = 3; // D3
+
 void setup(){
   Serial.begin(115200);
+  pinMode(ledPIN, OUTPUT);
 
   // Initialize MPU6050
   Serial.println("Initialize MPU6050");
@@ -15,14 +22,33 @@ void setup(){
   }
   mpu.calibrateGyro();
   mpu.setThreshold(3);
-
 }
 
 void loop() {
   Vector rawGyro = mpu.readRawGyro();
+  int xGyr = rawGyro.xGyr;
+
+  if ((xGyr > 1000 || xGyr < -1000) && !moving){
+    accelCount++;
+  }
+
+  else if (xGyr < 1000 && xGyr > -1000 && moving){
+    accelCount --;
+  }
+
+  if (accelCount >= 3){
+    moving = true;
+    accelCount = 0;
+  }
+
+  if (accelCount <= -2){
+    moving = false;
+    Serial.println("LOLOL");
+    accelCount = 0;
+  }
 
   Serial.print(" Xraw = ");
-  Serial.println(rawGyro.XAxis);
+  Serial.println(xGyr);
   
   delay(500);
 }
