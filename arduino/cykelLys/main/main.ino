@@ -17,6 +17,7 @@ int leftState = 0;
 int rightState = 0;
 
 bool flashOn = false;
+bool flashing = false;
 
 int flashCount = 0;
 
@@ -79,8 +80,24 @@ void loop() {
   bool rightFlash = rightState;
   Serial.println(photoValue);
 
-  if (leftState || rightState){
-    
+  if ((leftState || rightState) && !flashing){
+    flashing = true;
+  }
+
+  if (flashing){
+    if (leftState){
+      leftFlash = true;
+    }
+    if (rightState){
+      rightFlash = true;
+    }
+    flashCount++;
+  }
+
+  if (flashCount > 6){
+    leftFlash = false;
+    rightFlash = false;
+    flashing = false;
   }
   
   if ((photoValue < photoCal) && (!tailLight || photoCounter > 0)){
