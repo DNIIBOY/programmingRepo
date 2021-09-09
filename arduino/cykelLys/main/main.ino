@@ -47,6 +47,7 @@ int sides[NUMPIXELS] = {1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
 
 bool leftFlash = false;
 bool rightFlash = false;
+int breakLightCount = 0;
 
 
 void setup() {
@@ -76,20 +77,25 @@ void loop() {
   int photoValue = analogRead(photoPin);
   leftState = !digitalRead(button1Pin);
   rightState = !digitalRead(button2Pin);
-  bool leftFlash = leftState;
-  bool rightFlash = rightState;
+  // leftFlash = leftState;
+  // rightFlash = rightState;
   Serial.println(photoValue);
+  Serial.println(photoCounter);
+  Serial.print("Flashing: ");
+  Serial.println(flashing);
 
   if ((leftState || rightState) && !flashing){
     flashing = true;
   }
 
   if (flashing){
-    if (leftState){
-      leftFlash = true;
-    }
-    if (rightState){
-      rightFlash = true;
+    if (!leftFlash && !rightFlash){
+      if (leftState){
+        leftFlash = true;
+      }
+      if (rightState){
+        rightFlash = true;
+      } 
     }
     flashCount++;
   }
@@ -98,6 +104,7 @@ void loop() {
     leftFlash = false;
     rightFlash = false;
     flashing = false;
+    flashCount = 0;
   }
   
   if ((photoValue < photoCal) && (!tailLight || photoCounter > 0)){
@@ -125,27 +132,27 @@ void loop() {
   if (rightFlash && !flashOn){
       setColor(50, 10, 0, rightArrow, false);
       flashOn = true;
-      delay(400);
+      delay(300);
   }
 
-  if (leftFlash && !flashOn){
+  else if (leftFlash && !flashOn){
     setColor(50, 10, 0, leftArrow, false);
     flashOn = true;
-    delay(400);
+    delay(300);
   }
 
-  if ((rightFlash || leftFlash) && flashOn){
+  else if ((rightFlash || leftFlash) && flashOn){
     setColor(0, 0, 0, sides, false);
     flashOn = false;
-    delay(400);
+    delay(200);
   }
   
   if (breaking){
     setColor(255, 0, 0, midLight, false);
-    accelCount++;
+    breakLightCount++;
   }
-  if (breaking && accelCount > 5){
-    accelCount = 0;
+  if (breaking && breakLightCount > 7){
+    breakLightCount = 0;
     breaking = false;
     setColor(0, 0, 0, midLight, false);
   }
