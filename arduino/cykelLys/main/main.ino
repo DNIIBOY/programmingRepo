@@ -22,7 +22,7 @@ bool flashing = false;
 int flashCount = 0;
 
 
-const int photoCal = 600;  // Calibration value for photoresistor
+const int photoCal = 400;  // Calibration value for photoresistor
 const int ledOnDelay = 3;
 const int ledOffDelay = 10;
 const int photoPin = 0;
