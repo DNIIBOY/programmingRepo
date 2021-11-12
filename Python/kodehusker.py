@@ -1,25 +1,27 @@
-#ORDHUSKER 3000
+import os
+import pyAesCrypt
+
+# ORDHUSKER 3000
 
 file = "john.txt"
 
 cryptetFile = file + ".aes"
 
-import os
-import pyAesCrypt
-
 os.system('mode con: cols=47 lines=20')
 
-def emptyFile():
+
+def empty_file():
     fil = open(file, "w")
     fil.write("")
     fil.close()
 
-def cryptFile(mode, key):
+
+def crypt_file(mode, key):
     bufferSize = 64 * 1024
     try:
         if mode == "en":
             pyAesCrypt.encryptFile(file, cryptetFile, key, bufferSize)
-            emptyFile()
+            empty_file()
             return "Kryptering Succesfuld"
         elif mode == "de":
             pyAesCrypt.decryptFile(cryptetFile, file, key, bufferSize)
@@ -28,6 +30,7 @@ def cryptFile(mode, key):
             return "ugyldig mode"
     except:
         return "Fejl"
+
 
 def write():
     try:
@@ -38,7 +41,7 @@ def write():
             fil = open(file, "w")
             fil.write(text)
             fil.close()
-            print("\n" + cryptFile("en", password))
+            print("\n" + crypt_file("en", password))
             print("Ord gemt")
             input("\nTryk enter for hovedmenu")
         elif confirm.lower() == "n":
@@ -49,19 +52,20 @@ def write():
     except:
         print("Der skete en fejl")
 
+
 def read():
     count = 0
-    while count<3:
+    while count < 3:
         try:
-            password = input("\nHvad er koden?: ")
+            password = input("\ er koden?: ")
             if password.lower() == "q":
                 return
             else:
-                print("\n" + cryptFile("de", password))
+                print("\n" + crypt_file("de", password))
                 fil = open(file, "r")
                 print("\nDit ord er: " + str(fil.read()))
                 fil.close()
-                emptyFile()
+                empty_file()
                 count = 3
                 input("\nTryk enter for hovedmenu")
         except FileNotFoundError:
@@ -69,7 +73,8 @@ def read():
         except:
             print("Der skete en fejl")
             raise
-        count+=1
+        count += 1
+
 
 while True:
     os.system("cls")

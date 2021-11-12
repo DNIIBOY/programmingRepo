@@ -7,6 +7,7 @@ bool tailLight = false;
 int photoCounter = 0;
 
 const int ledPin = 3;
+bool ledStat = true;
 
 
 
@@ -18,23 +19,23 @@ void setup() {
 void loop() {
   int value = analogRead(photoPin);
   Serial.println(value);
-  if ((value < cal) && (!ledStat || counter > 0)){
-    counter--;
+  if ((value < cal) && (!ledStat || photoCounter > 0)){
+    photoCounter--;
   }
-  else if ((value > cal) && (ledStat || counter < 0)){
-    counter++;
+  else if ((value > cal) && (ledStat || photoCounter < 0)){
+    photoCounter++;
   }
 
-  if (counter < ledOnDelay*-1){
-    counter = 0;
+  if (photoCounter < ledOnDelay*-1){
+    photoCounter = 0;
     ledStat = true;
   }
-  else if (counter > ledOffDelay){
-    counter = 0;
+  else if (photoCounter > ledOffDelay){
+    photoCounter = 0;
     ledStat = false;
   }
   digitalWrite(ledPin, ledStat);
   Serial.print("Count: ");
-  Serial.println(counter);
+  Serial.println(photoCounter);
   delay(350);
 }
