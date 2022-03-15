@@ -1,3 +1,5 @@
+b'04 04 1c>\t 10}\t% 1a i 1a 03 .k 01 4'
+
 def egcd(a, b):
     x,y, u,v = 0,1, 1,0
     while a != 0:
@@ -7,12 +9,20 @@ def egcd(a, b):
         gcd = b
     return gcd, x, y
 
+
+def convert_to_text(pt: int) -> str:
+    hex_code = hex(pt)[2:]
+    bytes_object = bytes.fromhex(hex_code)
+    ascii_string = bytes_object.decode("ASCII")
+    return ascii_string
+
+
 def main():
 
-    p = 111351602227707581067416344643048751626960926253551879945433066776126511936461
-    q = 67722700071961988029846370299408511833514117774646239226239805715004968536019
-    e = 65537
-    ct = 7416559017732380714510020985419780493726289824818461938628854022948902779175432427219526599003916978168995567524860519149904946110153128594403636858898495
+    p = 160390912114499758109275030312460194685863931436864531742691
+    q = 460374952936305732755303497312183367004304494680683253666831
+    ct = 20110717990345687898226853609420384981656622084193266947150834445506719164043911436839039345613213247227489425483411000
+    e = 3
 
     # compute n
     n = p * q
@@ -24,11 +34,20 @@ def main():
     gcd, a, b = egcd(e, phi)
     d = a
 
-    print( "n:  " + str(d) );
-
     # Decrypt ciphertext
     pt = pow(ct, d, n)
-    print( "pt: " + str(pt) )
+
+
+    print("n:  " + str(n))
+    print("d:  " + str(d))
+
+    print("pt:  " + str(pt))
+
+    # Convert the number to a string of text
+    out = convert_to_text(pt)
+    print("Output:  " + str(out)) 
+
+
 
 if __name__ == "__main__":
     main()
