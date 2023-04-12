@@ -5,7 +5,7 @@ import re
 import requests
 
 url = "https://rffi.halbooking.dk/newlook/proc_liste.asp"
-os.system("mode con: cols=25 lines=4")
+os.system("mode con: cols=20 lines=2")
 
 def get_spaces() -> str:
     response = requests.get(url)
@@ -19,4 +19,4 @@ def get_spaces() -> str:
 if __name__ == "__main__":
     while True:
         print(get_spaces())
-        sleep(10)
+        sleep(60)
