@@ -10,7 +10,7 @@ os.system("mode con: cols=20 lines=2")
 def get_spaces() -> str:
     response = requests.get(url)
     soup = bs4.BeautifulSoup(response.text, "html.parser")
-    selector = "#item13286 > td.liste_wide.min992.holdinfo"
+    selector = "#item13287 > td.liste_wide.min992.holdinfo"
     td = str(soup.select(selector)[0])
     pattern = r"\d+ ledige pladser"
     return re.findall(pattern, td)[0]
