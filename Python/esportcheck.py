@@ -57,17 +57,22 @@ def get_team_info(team_tr: bs4.element.Tag) -> dict:
         if is_team_list(el):
             list_value = el.select("span")[0].text
             list_match = re.match(LIST_PATTERN, list_value)
-            team_info["name"] = list_match.group(1)
-            team_info["dates"] = list_match.group(2)
-            team_info["signupDays"] = int(list_match.group(3))
+            if list_match is not None:
+                team_info["name"] = list_match.group(1)
+                team_info["dates"] = list_match.group(2)
+                team_info["signupDays"] = int(list_match.group(3))
             daytime_value = el.select("div")[0].text
             daytime_match = re.match(DAYTIME_PATTERN, daytime_value)
-            team_info["weekday"] = daytime_match.group(1)
-            team_info["time"] = daytime_match.group(2)
+
+            if daytime_match is not None:
+                team_info["weekday"] = daytime_match.group(1)
+                team_info["time"] = daytime_match.group(2)
 
         elif is_team_info(el):
             team_info_value = el.text
             team_info_match = re.match(INFO_PATTERN, team_info_value)
+            if team_info_match is None:
+                continue
             team_info["location"] = team_info_match.group(1)
             team_info["trainer"] = team_info_match.group(2)
             team_info["freeSpaces"] = int(team_info_match.group(3))
