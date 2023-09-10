@@ -1,7 +1,6 @@
 from __future__ import annotations
 import time
 import json
-import threading
 
 
 class Dice:
@@ -67,57 +66,57 @@ class Dice:
         self._values = values
 
 
-def rotate(rotate_list: list, n: int) -> list:
-    return rotate_list[n:] + rotate_list[:n]
+def rotate(l, n):
+    return l[n:] + l[:n]
 
 
-def group_combination_count(n, number_of_groups, group_size) -> int:
+def numGroupCombs(n, nGrps, group_size):
     result = 1
-    for i in range(n, number_of_groups, -1):
+    for i in range(n, nGrps, -1):
         result *= i
 
     result = int(result)
-    divider = 1
+    myDiv = 1
     for i in range(2, group_size + 1):
-        divider *= i
+        myDiv *= i
 
-    result /= divider**number_of_groups
+    result /= myDiv**nGrps
     return int(result)
 
 
-def combination_groups(num_range, number_of_groups, group_size, offset=0, stop: int = None):
-    if stop is None:
-        stop = group_combination_count(len(num_range), number_of_groups, group_size)
+def ComboGroups(v, nGrps, group_size):
+    if not isinstance(v, list):
+        z = list(v)
+    else:
+        z = v.copy()
 
-    num_range = list(num_range)
+    for i in range(numGroupCombs(len(z), nGrps, group_size)):
+        yield z.copy()
 
-    for i in range(offset, stop, group_size):
-        yield num_range.copy()
+        idx1 = (nGrps - 1) * group_size - 1
+        idx2 = len(z) - 1
+        last1 = (nGrps - 2) * group_size + 1
 
-        idx1 = (number_of_groups - 1) * group_size - 1
-        idx2 = len(num_range) - 1
-        last1 = (number_of_groups - 2) * group_size + 1
-
-        while (idx2 > idx1 and num_range[idx2] > num_range[idx1]):
+        while (idx2 > idx1 and z[idx2] > z[idx1]):
             idx2 -= 1
 
-        if (idx2 + 1) < len(num_range):
-            if num_range[idx2 + 1] > num_range[idx1]:
-                num_range[idx1], num_range[idx2 + 1] = num_range[idx2 + 1], num_range[idx1]
+        if (idx2 + 1) < len(z):
+            if z[idx2 + 1] > z[idx1]:
+                z[idx1], z[idx2 + 1] = z[idx2 + 1], z[idx1]
         else:
             while idx1 > 0:
-                tip_point = num_range[idx2]
-                while (idx1 > last1 and tip_point < num_range[idx1]):
+                tipPnt = z[idx2]
+                while (idx1 > last1 and tipPnt < z[idx1]):
                     idx1 -= 1
-                if tip_point > num_range[idx1]:
+                if tipPnt > z[idx1]:
                     idx3 = idx1 + 1
-                    num_range[idx3:] = sorted(num_range[idx3:])
+                    z[idx3:] = sorted(z[idx3:])
                     xtr = last1 + group_size - idx3
-                    while num_range[idx3] < num_range[idx1]:
+                    while z[idx3] < z[idx1]:
                         idx3 += 1
 
-                    num_range[idx3], num_range[idx1] = num_range[idx1], num_range[idx3]
-                    num_range[(idx1 + 1):(idx3 + xtr)] = rotate(num_range[(idx1 + 1):(idx3 + xtr)], idx3 - idx1)
+                    z[idx3], z[idx1] = z[idx1], z[idx3]
+                    z[(idx1 + 1):(idx3 + xtr)] = rotate(z[(idx1 + 1):(idx3 + xtr)], idx3 - idx1)
 
                     break
                 else:
@@ -135,9 +134,11 @@ def dice_are_success(dice: list[Dice]):
     return False
 
 
-def find_success_dice(num_range, number_of_groups, offset=0, stop: int = None):
+def find_success_dice(num_range, number_of_groups):
+    success_dice: list[list[dice]] = []
     group_size = int(len(num_range) / number_of_groups)
-    for a in combination_groups(num_range, number_of_groups, group_size, offset, stop):
+    counter = 0
+    for a in ComboGroups(num_range, number_of_groups, group_size):
         dice = []
         name_index = 0
         for i in range(0, len(a), group_size):
@@ -145,46 +146,25 @@ def find_success_dice(num_range, number_of_groups, offset=0, stop: int = None):
             name_index += 1
 
         if dice_are_success(dice):
-            SUCCESS_DICE.append(dice)
+            success_dice.append(dice)
+
+        if counter % 1000000 == 0:
+            print(f"Found: {len(success_dice)}, current: {counter}")
+        counter += 1
+
+    return success_dice
 
 
-THREAD_COUNT = 1
-DICE_COUNT = 3
-DICE_SIDES = 6
-TOTAL_RANGE = range(1, DICE_COUNT * DICE_SIDES + 1)
-SUCCESS_DICE: list[list[Dice]] = []
-
-
-def main():
-    combination_count = group_combination_count(len(TOTAL_RANGE), DICE_COUNT, DICE_SIDES)
-    print(f"Inspecting {combination_count} combinations")
-
-    checks_per_thread = int(combination_count / THREAD_COUNT)
-    threads = []
-    for i in range(THREAD_COUNT):
-        offset = i * checks_per_thread
-        stop = offset + checks_per_thread
-        print(offset, stop)
-        if i == THREAD_COUNT - 1:
-            stop = None
-
-        t = threading.Thread(target=find_success_dice, args=(TOTAL_RANGE, DICE_COUNT, offset, stop))
-        t.start()
-        threads.append(t)
-
+def main(num_range, number_of_groups):
     start = time.time()
-    while any(t.is_alive() for t in threads):
-        time.sleep(1)
-        print(f"Found {len(SUCCESS_DICE)} success dice in {time.time() - start} seconds")
-
-    print(f"Found {len(SUCCESS_DICE)} success dice in {time.time() - start} seconds")
-
+    success_dice = find_success_dice(num_range, number_of_groups)
+    print(f"Found {len(success_dice)} success dice in {time.time() - start} seconds")
     formatted_dice = []
-    for dice in SUCCESS_DICE:
+    for dice in success_dice:
         formatted_dice.append([list(die.values) for die in dice])
     with open("success_dice.json", "w") as f:
         json.dump(formatted_dice, f, indent=4)
 
 
 if __name__ == "__main__":
-    main()
+    main(range(1, 19), 3)
