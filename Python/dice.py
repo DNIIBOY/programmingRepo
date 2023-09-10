@@ -66,57 +66,54 @@ class Dice:
         self._values = values
 
 
-def rotate(l, n):
-    return l[n:] + l[:n]
+def rotate(rotate_list: list, n: int) -> list:
+    return rotate_list[n:] + rotate_list[:n]
 
 
-def numGroupCombs(n, nGrps, group_size):
+def group_combination_count(number_count, group_count, group_size) -> int:
     result = 1
-    for i in range(n, nGrps, -1):
+    for i in range(number_count, group_count, -1):
         result *= i
 
     result = int(result)
-    myDiv = 1
+    divider = 1
     for i in range(2, group_size + 1):
-        myDiv *= i
+        divider *= i
 
-    result /= myDiv**nGrps
+    result /= divider**group_count
     return int(result)
 
 
-def ComboGroups(v, nGrps, group_size):
-    if not isinstance(v, list):
-        z = list(v)
-    else:
-        z = v.copy()
+def group_combinations(total_range, group_count, group_size):
+    total_range = list(total_range)
 
-    for i in range(numGroupCombs(len(z), nGrps, group_size)):
-        yield z.copy()
+    for i in range(group_combination_count(len(total_range), group_count, group_size)):
+        yield total_range.copy()
 
-        idx1 = (nGrps - 1) * group_size - 1
-        idx2 = len(z) - 1
-        last1 = (nGrps - 2) * group_size + 1
+        idx1 = (group_count - 1) * group_size - 1
+        idx2 = len(total_range) - 1
+        last1 = (group_count - 2) * group_size + 1
 
-        while (idx2 > idx1 and z[idx2] > z[idx1]):
+        while (idx2 > idx1 and total_range[idx2] > total_range[idx1]):
             idx2 -= 1
 
-        if (idx2 + 1) < len(z):
-            if z[idx2 + 1] > z[idx1]:
-                z[idx1], z[idx2 + 1] = z[idx2 + 1], z[idx1]
+        if (idx2 + 1) < len(total_range):
+            if total_range[idx2 + 1] > total_range[idx1]:
+                total_range[idx1], total_range[idx2 + 1] = total_range[idx2 + 1], total_range[idx1]
         else:
             while idx1 > 0:
-                tipPnt = z[idx2]
-                while (idx1 > last1 and tipPnt < z[idx1]):
+                tip_point = total_range[idx2]
+                while (idx1 > last1 and tip_point < total_range[idx1]):
                     idx1 -= 1
-                if tipPnt > z[idx1]:
+                if tip_point > total_range[idx1]:
                     idx3 = idx1 + 1
-                    z[idx3:] = sorted(z[idx3:])
+                    total_range[idx3:] = sorted(total_range[idx3:])
                     xtr = last1 + group_size - idx3
-                    while z[idx3] < z[idx1]:
+                    while total_range[idx3] < total_range[idx1]:
                         idx3 += 1
 
-                    z[idx3], z[idx1] = z[idx1], z[idx3]
-                    z[(idx1 + 1):(idx3 + xtr)] = rotate(z[(idx1 + 1):(idx3 + xtr)], idx3 - idx1)
+                    total_range[idx3], total_range[idx1] = total_range[idx1], total_range[idx3]
+                    total_range[(idx1 + 1):(idx3 + xtr)] = rotate(total_range[(idx1 + 1):(idx3 + xtr)], idx3 - idx1)
 
                     break
                 else:
@@ -138,7 +135,7 @@ def find_success_dice(num_range, number_of_groups):
     success_dice: list[list[dice]] = []
     group_size = int(len(num_range) / number_of_groups)
     counter = 0
-    for a in ComboGroups(num_range, number_of_groups, group_size):
+    for a in group_combinations(num_range, number_of_groups, group_size):
         dice = []
         name_index = 0
         for i in range(0, len(a), group_size):
