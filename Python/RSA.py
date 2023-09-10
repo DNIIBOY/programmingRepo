@@ -17,10 +17,10 @@ def convert_to_text(pt: int) -> str:
 
 def main():
 
-    p = 1461849912200000206276283741896701133693
-    q = 431899300006243611356963607089521499045809
-    e = 65537
-    ct = 421345306292040663864066688931456845278496274597031632020995583473619804626233684
+    p = 23
+    q = 29
+    e = 3
+    ct = 137
 
     # compute n
     n = p * q
@@ -42,7 +42,10 @@ def main():
     print("pt:  " + str(pt))
 
     # Convert the number to a string of text
-    out = convert_to_text(pt)
+    try:
+        out = convert_to_text(pt)
+    except:
+        out = "Could not convert to ASCII"
     print("Output:  " + str(out)) 
 
 
