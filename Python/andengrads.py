@@ -1,8 +1,6 @@
 from math import sqrt
 import os
 
-os.system('mode con: cols=42 lines=20')
-
 
 def andengrad(a, b, c, mellem):
     diskrimi = 0
@@ -17,13 +15,13 @@ def andengrad(a, b, c, mellem):
         r2 = (0 - b + kvdiskrimi) / (2 * a)
         topx = (0 - b) / (2 * a)
         topy = 0 - diskrimi / (4 * a)
-    except:
+    except (ValueError, ZeroDivisionError):
         print("Der er ingen løsninger")
         try:
             topx = (0 - b) / (2 * a)
             topy = 0 - diskrimi / (4 * a)
-        except:
-            pass
+        except ZeroDivisionError:
+            print("Der er ingen løsninger")
 
     if mellem.lower() == "n":
         print("Diskriminant: " + str(diskrimi))
@@ -48,13 +46,7 @@ y = -{round(diskrimi, 4)} / 4 * {a} = {round(topy, 4)}""")
 
 def fixfloat(num):
     if "," in num:
-        num = [x for x in num]
-        for i in num:
-            if i == ",":
-                value = num.index(i)
-                num.pop(value)
-                num.insert(value, ".")
-        num = float("".join(num))
+        num = num.replace(",", ".")
     else:
         num = eval(num)
     return float(num)
@@ -63,41 +55,39 @@ def fixfloat(num):
 while True:
     print("""----------Andengrads Funktioner----------
          Af: Daniel Nettelfield""")
-    try:
-        a = input("""            Indsæt a værdi: """)
-        if a.lower() == "q":
-            break
-        elif a.lower() == "c":
-            os.system("cls")
-            continue
-        else:
-            a = fixfloat(a)
-        b = input("""            Indsæt b værdi: """)
-        if b.lower() == "q":
-            break
-        elif b.lower() == "c":
-            os.system("cls")
-            continue
-        else:
-            b = fixfloat(b)
-        c = input("""            Indsæt c værdi: """)
-        if c.lower() == "q":
-            break
-        elif c.lower() == "c":
-            os.system("cls")
-            continue
-        else:
-            c = fixfloat(c)
-        mellem = str(input("""Vil du have mellemregninger med? (j/n): """))
-        print("------------------------------------------")
-        if mellem.lower() == "j" or mellem.lower() == "n":
-            andengrad(a, b, c, mellem)
-        elif mellem.lower() == "q":
-            break
-        elif mellem.lower() == "c":
-            os.system("cls")
-            continue
-        else:
-            print("Ugyldigt Input")
-    except:
-        print("""            Ugyldigt Input""")
+    a = input("""            Indsæt a værdi: """)
+    if a.lower() == "q":
+        break
+    elif a.lower() == "c":
+        os.system("cls")
+        continue
+    else:
+        a = fixfloat(a)
+    b = input("""            Indsæt b værdi: """)
+    if b.lower() == "q":
+        break
+    elif b.lower() == "c":
+        os.system("cls")
+        continue
+    else:
+        b = fixfloat(b)
+    c = input("""            Indsæt c værdi: """)
+    if c.lower() == "q":
+        break
+    elif c.lower() == "c":
+        os.system("cls")
+        continue
+    else:
+        c = fixfloat(c)
+    mellem = str(input("""Vil du have mellemregninger med? (j/n): """))
+    print("------------------------------------------")
+    if mellem.lower() == "j" or mellem.lower() == "n":
+        andengrad(a, b, c, mellem)
+    elif mellem.lower() == "q":
+        break
+    elif mellem.lower() == "c":
+        os.system("cls")
+        continue
+    else:
+        print("Ugyldigt Input")
+    print("""            Ugyldigt Input""")
