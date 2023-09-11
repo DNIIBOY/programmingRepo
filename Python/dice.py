@@ -135,6 +135,8 @@ def find_success_dice(num_range, number_of_groups):
     success_dice: list[list[dice]] = []
     group_size = int(len(num_range) / number_of_groups)
     counter = 0
+    current_percent = 0
+    total_count = group_combination_count(len(num_range), number_of_groups, group_size)
     for a in group_combinations(num_range, number_of_groups, group_size):
         dice = []
         name_index = 0
@@ -145,22 +147,34 @@ def find_success_dice(num_range, number_of_groups):
         if dice_are_success(dice):
             success_dice.append(dice)
 
-        if counter % 1000000 == 0:
-            print(f"Found: {len(success_dice)}, current: {counter}")
+        if counter/total_count * 100 > current_percent:
+            current_percent += 1
+            print(f"{current_percent}%")
+            save_dice(success_dice)
+            success_dice = []
+
         counter += 1
 
     return success_dice
 
 
-def main(num_range, number_of_groups):
-    start = time.time()
-    success_dice = find_success_dice(num_range, number_of_groups)
-    print(f"Found {len(success_dice)} success dice in {time.time() - start} seconds")
-    formatted_dice = []
+def save_dice(success_dice):
+    with open("success_dice.json", "r") as f:
+        formatted_dice = json.load(f)
     for dice in success_dice:
         formatted_dice.append([list(die.values) for die in dice])
     with open("success_dice.json", "w") as f:
         json.dump(formatted_dice, f, indent=4)
+
+
+def main(num_range, number_of_groups):
+    with open("success_dice.json", "w") as f:
+        json.dump([], f, indent=4)
+    start = time.time()
+    find_success_dice(num_range, number_of_groups)
+    with open("success_dice.json", "r") as f:
+        success_dice = json.load(f)
+    print(f"Found {len(success_dice)} success dice in {time.time() - start} seconds")
 
 
 if __name__ == "__main__":
